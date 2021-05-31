@@ -15,4 +15,11 @@ public class LogicTest {
     public void testImplementation2() {
         int result = new Logic().someImplementation();
     }
+
+    @Test
+    public void testSum() {
+        assertEquals(3, new Logic().sum(1, 2));
+        assertEquals(3, new Logic().sum(2, 1));
+        assertEquals(0, new Logic().sum(0, 0));
+    }
 }
