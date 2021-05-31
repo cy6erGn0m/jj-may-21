@@ -1,4 +1,4 @@
 # jj-may-21
 
-Exaple project for Java Junior Developer course
+Example project for Java Junior Developer course
 
