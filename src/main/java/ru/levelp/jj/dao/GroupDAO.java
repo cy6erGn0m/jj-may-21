@@ -4,6 +4,7 @@ import ru.levelp.jj.model.Group;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.List;
 
 public class GroupDAO {
     private final EntityManager manager;
@@ -34,5 +35,11 @@ public class GroupDAO {
         } catch (NoResultException notFound) {
             return null;
         }
+    }
+
+    public List<Group> findBigGroups(int minMembersCount) {
+        return manager.createQuery("from Group g where size(g.users) >= :min", Group.class)
+                .setParameter("min", minMembersCount)
+                .getResultList();
     }
 }

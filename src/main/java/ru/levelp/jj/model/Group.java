@@ -13,6 +13,7 @@ import java.util.List;
 )
 public class Group {
     @Id
+    @GeneratedValue
     private int id;
 
     @Column(unique = true, nullable = false)
