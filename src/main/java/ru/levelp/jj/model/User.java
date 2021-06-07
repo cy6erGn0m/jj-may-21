@@ -9,13 +9,14 @@ public class User {
     @GeneratedValue
     private int id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String login;
 
     @Column(nullable = false)
     private String password;
 
     @ManyToOne
+    @JoinColumn(name = "group_fk")
     private Group group;
 
     public User(String login, String password) {

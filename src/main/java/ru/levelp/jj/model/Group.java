@@ -13,5 +13,9 @@ public class Group {
     private String name;
 
     @OneToMany(mappedBy = "group")
+//    @JoinTable(name = "users_to_groups",
+//            joinColumns = @JoinColumn(name = "groups_fk"),
+//            inverseJoinColumns = @JoinColumn(name = "users_fk")
+//    )
     private List<User> users;
 }
