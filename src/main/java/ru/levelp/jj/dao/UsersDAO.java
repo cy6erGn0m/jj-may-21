@@ -63,6 +63,10 @@ public class UsersDAO {
                 .getResultList();
     }
 
+    public int count() {
+        return manager.createQuery("select count(u) from User u", Number.class).getSingleResult().intValue();
+    }
+
     public List<User> findAllSortedBy(String columnName) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
 
