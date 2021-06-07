@@ -5,6 +5,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "groups")
+@NamedQueries(
+        @NamedQuery(
+                name = "findByName",
+                query = "select g from Group g where g.name = :groupName"
+        )
+)
 public class Group {
     @Id
     private int id;
