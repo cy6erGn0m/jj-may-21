@@ -19,6 +19,13 @@ public class Group {
 //    )
     private List<User> users;
 
+    public Group(String name) {
+        this.name = name;
+    }
+
+    public Group() {
+    }
+
     public int getId() {
         return id;
     }
