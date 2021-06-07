@@ -10,6 +10,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import java.util.Arrays;
+
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
@@ -81,5 +83,25 @@ public class UsersDAOTest {
 
         assertEquals(singletonList(createdUser), users.findByGroupName("my_group"));
         assertEquals(emptyList(), users.findByGroupName("non-existing-group"));
+    }
+
+    @Test
+    public void testSortedBy() {
+        User first = users.create("login1", "pass2");
+        User second = users.create("login2", "pass1");
+
+        assertEquals(Arrays.asList(first, second), users.findAllSortedBy("login"));
+        assertEquals(Arrays.asList(second, first), users.findAllSortedBy("password"));
+
+        try {
+            users.findAllSortedBy("-- wrong column name");
+            fail("Sorting by non-existing column shouldn't work");
+        } catch (IllegalArgumentException expected) {
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSortedByWrongColumn() {
+        users.findAllSortedBy("-- wrong column name");
     }
 }
