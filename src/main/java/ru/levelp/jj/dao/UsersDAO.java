@@ -1,5 +1,7 @@
 package ru.levelp.jj.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.levelp.jj.model.User;
 
 import javax.persistence.EntityManager;
@@ -9,12 +11,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+@Repository
 public class UsersDAO {
-    private final EntityManager manager;
-
-    public UsersDAO(EntityManager manager) {
-        this.manager = manager;
-    }
+    @Autowired
+    private EntityManager manager;
 
     public User create(String login, String password) {
         User user = new User(login, password);

@@ -1,43 +1,34 @@
 package ru.levelp.jj.dao;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ru.levelp.jj.TestConfig;
+import ru.levelp.jj.configs.AppConfig;
 import ru.levelp.jj.model.Group;
 import ru.levelp.jj.model.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GroupDAOTest {
-    private EntityManagerFactory factory;
+    @Autowired
     private EntityManager manager;
+
+    @Autowired
     private GroupDAO groups;
+
+    @Autowired
     private UsersDAO users;
-
-    @Before
-    public void setUp() {
-        factory = Persistence.createEntityManagerFactory("TestPersistenceUnit");
-        manager = factory.createEntityManager();
-        groups = new GroupDAO(manager);
-        users = new UsersDAO(manager);
-    }
-
-    @After
-    public void tearDown() {
-        if (manager != null) {
-            manager.close();
-        }
-        if (factory != null) {
-            factory.close();
-        }
-    }
 
     @Test
     public void create() {

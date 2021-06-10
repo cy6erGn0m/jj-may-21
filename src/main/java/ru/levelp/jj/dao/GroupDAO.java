@@ -1,14 +1,18 @@
 package ru.levelp.jj.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.levelp.jj.model.Group;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.List;
 
+@Repository
 public class GroupDAO {
     private final EntityManager manager;
 
+    @Autowired
     public GroupDAO(EntityManager manager) {
         this.manager = manager;
     }

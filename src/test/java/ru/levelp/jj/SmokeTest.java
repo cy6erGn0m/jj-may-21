@@ -1,21 +1,27 @@
 package ru.levelp.jj;
 
-import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ru.levelp.jj.configs.AppConfig;
 import ru.levelp.jj.model.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class SmokeTest {
+    @Autowired
+    private EntityManager entityManager;
+
     @Test
     public void createUserTest() {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistenceUnit");
-        EntityManager entityManager = factory.createEntityManager();
-
         User user = new User("test", "pass");
         entityManager.getTransaction().begin();
         entityManager.persist(user);
@@ -28,8 +34,5 @@ public class SmokeTest {
                 .setParameter("id", user.getId())
                 .getSingleResult();
         assertNotNull(foundByQuery);
-
-        entityManager.close();
-        factory.close();
     }
 }
