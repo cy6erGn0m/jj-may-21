@@ -35,4 +35,11 @@ public class TransactionsDAO {
                 .setParameter("userId", user.getId())
                 .getResultList();
     }
+
+    public List<Transaction> findLast(int count) {
+        return manager.createQuery(
+                "from Transaction order by time desc",
+                Transaction.class
+        ).setMaxResults(count).getResultList();
+    }
 }
