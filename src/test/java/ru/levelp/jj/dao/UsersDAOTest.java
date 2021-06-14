@@ -1,13 +1,11 @@
 package ru.levelp.jj.dao;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.levelp.jj.TestConfig;
-import ru.levelp.jj.configs.AppConfig;
 import ru.levelp.jj.model.Group;
 import ru.levelp.jj.model.User;
 
@@ -16,9 +14,9 @@ import java.util.Arrays;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = TestConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UsersDAOTest {
@@ -90,9 +88,13 @@ public class UsersDAOTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testSortedByWrongColumn() {
-        users.findAllSortedBy("-- wrong column name");
+        try {
+            users.findAllSortedBy("-- wrong column name");
+            fail("The sort should fail");
+        } catch (IllegalArgumentException expected) {
+        }
     }
 
     @Test
