@@ -3,7 +3,13 @@
 <body>
 
 <p>
-    <a href="/register">Регистрация</a>
+    <span th:if="${userSession.loggedIn}"
+          th:text="'Здравствуйте, ' + ${userSession.login}"></span>
+    <a href="/logout" th:if="${userSession.loggedIn}">Выход</a>
+
+    <a href="/login" th:if="${not userSession.loggedIn}">Вход</a>
+    <a href="/register" th:if="${not userSession.loggedIn}">Регистрация</a>
+
     <a href="/transactions/generate">Сгенерировать транзакции</a>
 </p>
 
