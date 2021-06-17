@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>
+    <span th:text="${fileSize}"></span>
+</p>
+
+<form method="post" action="/file/upload" enctype="multipart/form-data">
+    <p>
+        <label>Описание:
+            <input type="text" name="description">
+        </label>
+    </p>
+    <p>
+        <input type="file" name="file">
+    </p>
+    <p>
+        <input type="submit">
+    </p>
+</form>
+</body>
+</html>
