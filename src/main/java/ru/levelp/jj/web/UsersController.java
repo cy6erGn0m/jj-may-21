@@ -2,12 +2,13 @@ package ru.levelp.jj.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 import ru.levelp.jj.dao.UsersDAO;
 import ru.levelp.jj.model.User;
+
+import javax.validation.Valid;
 
 @Controller
 @SessionAttributes("userSession")
@@ -16,16 +17,31 @@ public class UsersController {
     private UsersDAO users;
 
     @GetMapping("/register")
-    public String showRegisterForm() {
+    public String showRegisterForm(
+            @ModelAttribute("form") RegistrationForm form) {
         return "register";
     }
 
     @PostMapping("/register")
     public String handleRegister(
-            @RequestParam String login,
-            @RequestParam String password
+            @ModelAttribute("form")
+            @Valid
+            RegistrationForm form,
+            BindingResult result
     ) {
-        users.create(login, password);
+        if (!form.getPassword().equals(form.getPasswordConfirmation())) {
+            result.addError(new FieldError(
+                    "form",
+                    "passwordConfirmation",
+                    "Password and confirmation should match"
+            ));
+        }
+
+        if (result.hasErrors()) {
+            return "register";
+        }
+
+        users.create(form.getLogin(), form.getPassword());
         return "redirect:/";
     }
 
@@ -55,5 +71,10 @@ public class UsersController {
     public String handleLogout(UserSession userSession) {
         userSession.clear();
         return "redirect:/";
+    }
+
+    @ModelAttribute("form")
+    public RegistrationForm createDefault() {
+        return new RegistrationForm();
     }
 }
