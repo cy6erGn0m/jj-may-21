@@ -47,6 +47,7 @@ public class UsersController {
             return "redirect:/";
         }
 
+        userSession.clear();
         return "redirect:/login";
     }
 
