@@ -9,6 +9,8 @@ import ru.levelp.jj.TestConfig;
 import ru.levelp.jj.model.Transaction;
 import ru.levelp.jj.model.User;
 
+import javax.persistence.RollbackException;
+import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -67,5 +69,18 @@ public class TransactionsDAOTest {
         Transaction tx2 = transactions.create(new Date(), 10.0, sender, recipient);
         assertEquals(List.of(tx2, tx1), transactions.findLast(10));
         assertEquals(List.of(tx2), transactions.findLast(1));
+    }
+
+    @Test
+    void createNegativeAmountShouldFail() {
+        User sender = users.create("sender", "pass");
+        User recipient = users.create("recipient", "pass");
+
+        try {
+            transactions.create(new Date(), -10.0, sender, recipient);
+            fail("We shouldn't allow negative amounts");
+        } catch (RollbackException cause) {
+            assertTrue(cause.getCause() instanceof ConstraintViolationException);
+        }
     }
 }

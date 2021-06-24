@@ -1,6 +1,7 @@
 package ru.levelp.jj.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.util.Date;
 
 @Entity
@@ -13,6 +14,7 @@ public class Transaction {
     private Date time;
 
     @Column
+    @Positive
     private double amount;
 
     @ManyToOne(optional = false)
@@ -27,9 +29,9 @@ public class Transaction {
         this.sender = sender;
         this.recipient = recipient;
 
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Amount should be positive: " + amount);
-        }
+//        if (amount <= 0) {
+//            throw new IllegalArgumentException("Amount should be positive: " + amount);
+//        }
 
         if (sender == recipient) {
             throw new IllegalArgumentException("Sender and recipient should be different: " + sender);
