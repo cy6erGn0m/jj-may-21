@@ -26,6 +26,9 @@ public class UsersDAOTest {
     @Autowired
     private UsersDAO users;
 
+    @Autowired
+    private UsersCustomSort sortedUsers;
+
     @Test
     public void createAndFindById() {
         User createdUser = users.create("login1", "pass");
@@ -78,11 +81,11 @@ public class UsersDAOTest {
         User first = users.create("login1", "pass2");
         User second = users.create("login2", "pass1");
 
-        assertEquals(Arrays.asList(first, second), users.findAllSortedBy("login"));
-        assertEquals(Arrays.asList(second, first), users.findAllSortedBy("password"));
+        assertEquals(Arrays.asList(first, second), sortedUsers.findAllSortedBy("login"));
+        assertEquals(Arrays.asList(second, first), sortedUsers.findAllSortedBy("password"));
 
         try {
-            users.findAllSortedBy("-- wrong column name");
+            sortedUsers.findAllSortedBy("-- wrong column name");
             fail("Sorting by non-existing column shouldn't work");
         } catch (IllegalArgumentException expected) {
         }
@@ -91,7 +94,7 @@ public class UsersDAOTest {
     @Test
     public void testSortedByWrongColumn() {
         try {
-            users.findAllSortedBy("-- wrong column name");
+            sortedUsers.findAllSortedBy("-- wrong column name");
             fail("The sort should fail");
         } catch (IllegalArgumentException expected) {
         }

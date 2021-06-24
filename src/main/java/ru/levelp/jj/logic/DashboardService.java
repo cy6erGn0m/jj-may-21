@@ -18,11 +18,7 @@ public class DashboardService {
     private TransactionsDAO transactions;
 
     public List<Transaction> findByUserId(int userId) {
-        User user = users.findById(userId);
-        if (user == null) {
-            throw new IllegalStateException("User " + userId + " not found");
-        }
-
+        User user = users.findById(userId).orElseThrow(() -> new IllegalStateException("User " + userId + " not found"));
         return transactions.findByUser(user);
     }
 }

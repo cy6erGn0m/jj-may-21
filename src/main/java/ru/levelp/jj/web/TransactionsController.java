@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.levelp.jj.dao.TransactionsDAO;
+import ru.levelp.jj.dao.UsersCustomSort;
 import ru.levelp.jj.dao.UsersDAO;
 import ru.levelp.jj.model.User;
 
@@ -17,7 +18,7 @@ public class TransactionsController {
     private TransactionsDAO transactions;
 
     @Autowired
-    private UsersDAO users;
+    private UsersCustomSort users;
 
     @GetMapping("/transactions/generate")
     public String createExampleTransactions() {

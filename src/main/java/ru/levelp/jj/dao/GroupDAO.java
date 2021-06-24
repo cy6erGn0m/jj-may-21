@@ -1,43 +1,25 @@
 package ru.levelp.jj.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.jj.model.Group;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import java.util.List;
 
 @Repository
-public class GroupDAO {
-    private final EntityManager manager;
-
-    @Autowired
-    public GroupDAO(EntityManager manager) {
-        this.manager = manager;
-    }
-
+public interface GroupDAO extends JpaRepository<Group, Integer> {
     @Transactional
-    public Group create(String groupName) {
+    default Group create(String groupName) {
         Group group = new Group(groupName);
-        manager.persist(group);
+        save(group);
         return group;
     }
 
-    public Group findByName(String groupName) {
-        try {
-            return manager.createNamedQuery("findByName", Group.class)
-                    .setParameter("groupName", groupName)
-                    .getSingleResult();
-        } catch (NoResultException notFound) {
-            return null;
-        }
-    }
+    Group findByName(String name);
 
-    public List<Group> findBigGroups(int minMembersCount) {
-        return manager.createQuery("from Group g where size(g.users) >= :min", Group.class)
-                .setParameter("min", minMembersCount)
-                .getResultList();
-    }
+    @Query("from Group g where size(g.users) >= :min")
+    List<Group> findBigGroups(@Param("min") int minMembersCount);
 }
