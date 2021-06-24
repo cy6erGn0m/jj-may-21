@@ -9,6 +9,7 @@ import ru.levelp.jj.dao.UsersDAO;
 import ru.levelp.jj.model.User;
 
 import javax.validation.Valid;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @Controller
 @SessionAttributes("userSession")
@@ -41,7 +42,20 @@ public class UsersController {
             return "register";
         }
 
-        users.create(form.getLogin(), form.getPassword());
+        try {
+            users.create(form.getLogin(), form.getPassword());
+        } catch (Exception cause) {
+            result.addError(new FieldError(
+                    "form",
+                    "login",
+                    "Пользователь с таким логином уже существует"
+            ));
+        }
+
+        if (result.hasErrors()) {
+            return "register";
+        }
+
         return "redirect:/";
     }
 

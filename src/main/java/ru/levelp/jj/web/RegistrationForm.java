@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 public class RegistrationForm {
     @Size(min = 4, max = 10)
-    @Pattern(regexp = "[a-zA-Z0-9_.-]{4,10}",
+    @Pattern(regexp = "[a-zA-Z0-9_.-]*",
             message = "Login should consist of letters, digits, underscore, " +
                     "dot or hyphen")
     private String login;
