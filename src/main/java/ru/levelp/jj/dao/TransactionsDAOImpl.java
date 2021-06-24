@@ -2,6 +2,7 @@ package ru.levelp.jj.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.jj.model.Transaction;
 import ru.levelp.jj.model.User;
 
@@ -15,17 +16,10 @@ public class TransactionsDAOImpl implements TransactionsDAO {
     private EntityManager manager;
 
     @Override
+    @Transactional
     public Transaction create(Date time, double amount, User sender, User recipient) {
         Transaction tx = new Transaction(time, amount, sender, recipient);
-        manager.getTransaction().begin();
-        try {
-            manager.persist(tx);
-            manager.getTransaction().commit();
-        } catch (Exception e) {
-            manager.getTransaction().rollback();
-            throw e;
-        }
-
+        manager.persist(tx);
         return tx;
     }
 
@@ -46,3 +40,20 @@ public class TransactionsDAOImpl implements TransactionsDAO {
         ).setMaxResults(count).getResultList();
     }
 }
+
+//class TransactionsDAOGenerated extends TransactionsDAOImpl {
+//    @Override
+//    public Transaction create(Date time, double amount, User sender, User recipient) {
+//        boolean started;
+//        // if (!hasTransaction)
+//        // begin + started = true
+//        try {
+//            return super.create(time, amount, sender, recipient);
+//            // if (started) {
+//            // commit
+//        } catch (Exception cause) {
+//            // rollback
+//            throw cause;
+//        }
+//    }
+//}

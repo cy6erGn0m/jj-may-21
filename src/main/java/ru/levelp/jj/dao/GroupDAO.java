@@ -2,6 +2,7 @@ package ru.levelp.jj.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.jj.model.Group;
 
 import javax.persistence.EntityManager;
@@ -17,17 +18,10 @@ public class GroupDAO {
         this.manager = manager;
     }
 
+    @Transactional
     public Group create(String groupName) {
         Group group = new Group(groupName);
-        manager.getTransaction().begin();
-        try {
-            manager.persist(group);
-            manager.getTransaction().commit();
-        } catch (Exception e) {
-            manager.getTransaction().rollback();
-            throw e;
-        }
-
+        manager.persist(group);
         return group;
     }
 

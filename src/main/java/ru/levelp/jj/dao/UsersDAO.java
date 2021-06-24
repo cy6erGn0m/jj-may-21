@@ -2,6 +2,7 @@ package ru.levelp.jj.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.jj.model.User;
 
 import javax.persistence.EntityManager;
@@ -16,19 +17,30 @@ public class UsersDAO {
     @Autowired
     private EntityManager manager;
 
+    @Transactional
     public User create(String login, String password) {
         User user = new User(login, password);
-
-        manager.getTransaction().begin();
-        try {
-            manager.persist(user);
-            manager.getTransaction().commit();
-        } catch (Exception e) {
-            manager.getTransaction().rollback();
-            throw e;
-        }
-
+        manager.persist(user);
         return user;
+    }
+
+    @Transactional
+    public void credit(User user, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount should be positive");
+        }
+        user.setBalance(user.getBalance() + amount);
+    }
+
+    @Transactional
+    public void debit(User user, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("amount should be positive");
+        }
+        if (user.getBalance() < amount) {
+            throw new IllegalStateException("Not enough money to debit");
+        }
+        user.setBalance(user.getBalance() - amount);
     }
 
     public User findById(int id) {
