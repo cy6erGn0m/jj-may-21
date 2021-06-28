@@ -2,8 +2,10 @@
 <html>
 <body>
 
-<p>
+<p th:if="${fileId > 0}">
     <span th:text="${fileSize}"></span>
+    <span th:text="${fileId}"></span>
+    <img th:src="${'/file/show/' + fileId}" alt="">
 </p>
 
 <form method="post" action="/file/upload" enctype="multipart/form-data">
