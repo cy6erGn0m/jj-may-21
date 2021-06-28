@@ -17,6 +17,7 @@ import java.util.List;
 
 @Repository
 public interface TransactionsDAO extends JpaRepository<Transaction, Long> {
+    @Query("from Transaction where sender = :user or recipient = :user")
     List<Transaction> findByUser(User user);
 
     @Query("from Transaction order by time desc")

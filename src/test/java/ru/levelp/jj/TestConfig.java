@@ -1,5 +1,6 @@
 package ru.levelp.jj;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +18,10 @@ import javax.persistence.Persistence;
                 classes = {ProdJpaConfig.class, AppMain.class}
         )
 )
+@EnableAutoConfiguration
 public class TestConfig {
     @Bean
-    public EntityManagerFactory factory() {
+    public EntityManagerFactory entityManagerFactory() {
         return Persistence.createEntityManagerFactory("TestPersistenceUnit");
     }
 }

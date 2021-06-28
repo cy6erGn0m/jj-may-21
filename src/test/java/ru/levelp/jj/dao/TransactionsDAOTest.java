@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.TransactionException;
 import ru.levelp.jj.TestConfig;
 import ru.levelp.jj.model.Transaction;
 import ru.levelp.jj.model.User;
@@ -79,8 +80,8 @@ public class TransactionsDAOTest {
         try {
             transactions.create(new Date(), -10.0, sender, recipient);
             fail("We shouldn't allow negative amounts");
-        } catch (RollbackException cause) {
-            assertTrue(cause.getCause() instanceof ConstraintViolationException);
+        } catch (TransactionException cause) {
+            assertTrue(cause.getCause().getCause() instanceof ConstraintViolationException);
         }
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.jj.TestConfig;
 import ru.levelp.jj.model.Group;
 import ru.levelp.jj.model.User;
@@ -44,6 +45,7 @@ public class GroupDAOTest {
     }
 
     @Test
+    @Transactional
     public void testFindBigGroups() {
         assertEquals(Collections.emptyList(), groups.findBigGroups(1));
 
@@ -53,11 +55,9 @@ public class GroupDAOTest {
         Group big = groups.create("big");
         Group small = groups.create("small");
 
-        manager.getTransaction().begin();
         a.setGroup(big);
         b.setGroup(big);
         c.setGroup(small);
-        manager.getTransaction().commit();
 
         assertEquals(Collections.singletonList(big), groups.findBigGroups(2));
         assertEquals(Arrays.asList(big, small), groups.findBigGroups(1));

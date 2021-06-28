@@ -2,6 +2,7 @@ package ru.levelp.jj.model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Users")
@@ -75,5 +76,29 @@ public class User {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", balance=" + balance +
+                ", group=" + group +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && Double.compare(user.balance, balance) == 0 && login.equals(user.login) && password.equals(user.password) && Objects.equals(group, user.group);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login, password, balance, group);
     }
 }

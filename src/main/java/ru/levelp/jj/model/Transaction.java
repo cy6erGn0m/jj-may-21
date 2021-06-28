@@ -3,6 +3,7 @@ package ru.levelp.jj.model;
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Transaction {
@@ -79,5 +80,29 @@ public class Transaction {
 
     public void setRecipient(User recipient) {
         this.recipient = recipient;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", time=" + time +
+                ", amount=" + amount +
+                ", sender=" + sender +
+                ", recipient=" + recipient +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return id == that.id && Double.compare(that.amount, amount) == 0 && time.equals(that.time) && sender.equals(that.sender) && recipient.equals(that.recipient);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, time, amount, sender, recipient);
     }
 }

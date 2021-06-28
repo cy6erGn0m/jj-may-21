@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.jj.TestConfig;
 import ru.levelp.jj.model.Group;
 import ru.levelp.jj.model.User;
@@ -35,9 +36,9 @@ public class UsersDAOTest {
         assertNotNull(createdUser);
 
         assertEquals(createdUser, manager.find(User.class, createdUser.getId()));
-        assertEquals(createdUser, users.findById(createdUser.getId()));
+        assertEquals(createdUser, users.findById(createdUser.getId()).orElseThrow());
 
-        assertNull(users.findById(687875786));
+        assertTrue(users.findById(687875786).isEmpty());
     }
 
     @Test
@@ -63,14 +64,13 @@ public class UsersDAOTest {
     }
 
     @Test
+    @Transactional
     public void findByGroupName() {
         User createdUser = users.create("login1", "pass");
 
         Group group = new Group("my_group");
-        manager.getTransaction().begin();
         manager.persist(group);
         createdUser.setGroup(group);
-        manager.getTransaction().commit();
 
         assertEquals(singletonList(createdUser), users.findByGroupName("my_group"));
         assertEquals(emptyList(), users.findByGroupName("non-existing-group"));
