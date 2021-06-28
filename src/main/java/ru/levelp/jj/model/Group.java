@@ -1,5 +1,8 @@
 package ru.levelp.jj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -18,9 +21,11 @@ public class Group {
     private int id;
 
     @Column(unique = true, nullable = false)
+    @JsonProperty("groupName")
     private String name;
 
     @OneToMany(mappedBy = "group")
+    @JsonIgnore
 //    @JoinTable(name = "users_to_groups",
 //            joinColumns = @JoinColumn(name = "groups_fk"),
 //            inverseJoinColumns = @JoinColumn(name = "users_fk")

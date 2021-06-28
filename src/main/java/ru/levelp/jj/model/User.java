@@ -1,5 +1,7 @@
 package ru.levelp.jj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +17,7 @@ public class User {
     private String login;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column
@@ -25,9 +28,11 @@ public class User {
     private Group group;
 
     @OneToMany(mappedBy = "sender")
+    @JsonIgnore
     private List<Transaction> transactionsSending;
 
     @OneToMany(mappedBy = "recipient")
+    @JsonIgnore
     private List<Transaction> transactionsRecieving;
 
     public User(String login, String password) {
